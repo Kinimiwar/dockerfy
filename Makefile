@@ -38,8 +38,8 @@ lint:
 
 is-open-source-clean:
 	@{ \
-		if glide -q list 2>/dev/null | egrep -iq 'github.com/SocialCodeInc'; then \
-			echo "Dockerfy is OPEN SOURCE -- no dependencies on SocialCodeInc sources are allowed"; \
+		if glide -q list 2>/dev/null | egrep -iq 'github.com/instacart'; then \
+			echo "Dockerfy is OPEN SOURCE -- no dependencies on instacart sources are allowed"; \
 		else \
 			echo "Dockerfy is clean for OPEN SOURCE"; \
 		fi; \
@@ -108,20 +108,21 @@ nginx-with-dockerfy:  dist/.mk.nginx-with-dockerfy
 
 
 dist/.mk.nginx-with-dockerfy: Makefile dist/linux/amd64/dockerfy Dockerfile.nginx-with-dockerfy
-	docker build -t socialcode/nginx-with-dockerfy:$(TAG) --file Dockerfile.nginx-with-dockerfy .
-	docker tag socialcode/nginx-with-dockerfy:$(TAG) nginx-with-dockerfy
+	docker build -t instacart/nginx-with-dockerfy:$(TAG) -t instacart/nginx-with-dockerfy:latest --file Dockerfile.nginx-with-dockerfy .
+	docker tag instacart/nginx-with-dockerfy:latest nginx-with-dockerfy
+
 	touch dist/.mk.nginx-with-dockerfy
 
 
 float-tags: is-clean-z-release  nginx-with-dockerfy
-	docker tag socialcode/nginx-with-dockerfy:$(TAG) socialcode/nginx-with-dockerfy:$(YTAG)
-	docker tag socialcode/nginx-with-dockerfy:$(TAG) socialcode/nginx-with-dockerfy:$(XTAG)
+	docker tag instacart/nginx-with-dockerfy:$(TAG) instacart/nginx-with-dockerfy:$(YTAG)
+	docker tag instacart/nginx-with-dockerfy:$(TAG) instacart/nginx-with-dockerfy:$(XTAG)
 
 
-push: float-tags
-	docker images | grep nginx-with-dockerfy
+push:
+	# docker images | grep nginx-with-dockerfy
 	# pushing the entire repository will push all tagged images
-	docker push socialcode/nginx-with-dockerfy
+	docker push instacart/nginx-with-dockerfy:latest
 
 
 test: fmt lint is-open-source-clean nginx-with-dockerfy

@@ -1,4 +1,4 @@
-package: github.com/SocialCodeInc/dockerfy
+package: github.com/instacart/dockerfy
 import:
 - package: github.com/hpcloud/tail
 - package: golang.org/x/net
